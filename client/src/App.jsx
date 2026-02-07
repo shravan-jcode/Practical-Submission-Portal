@@ -37,6 +37,7 @@ import StudentProtectRoute from "./protected/StudentProtectRoute";
 import ErrorPage from './pages/ErrorPage';
 import AllPracticals from './pages/Teacher/AllPracticals';
 import ViewApprovedPractical from './pages/Teacher/ViewApprovedPractical';
+import ViewPractical from './pages/Student/ViewPractical';
 
 export const appRouter = createBrowserRouter([
     {
@@ -95,6 +96,8 @@ export const appRouter = createBrowserRouter([
                     { path: 'join-class', element: <JoinClass /> },
                     { path: 'my-classes', element: <EnrolledClass /> },
                 { path: 'submit/:classId/:subjectId', element: <PracticalSubmit /> },
+                { path: "view/:id", element: <ViewPractical /> },
+
 
                     { path: 'check-status', element: <CheckStatus /> },
                     

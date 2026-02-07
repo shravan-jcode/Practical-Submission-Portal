@@ -20,5 +20,3 @@ export const createHttpOnlyCookie = (res, token) => {
     });
 };
 
-// Note: You must ensure process.env.NODE_ENV is set correctly (e.g., 'development' or 'production') 
-// in your main server file or .env configuration.

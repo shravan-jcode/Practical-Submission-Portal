@@ -11,16 +11,19 @@ const AllPracticals = () => {
   const [filterSubject, setFilterSubject] = useState("");
   const [filterClass, setFilterClass] = useState("");
 
-  const PRIMARY_TEXT = "text-[#2B2B2B]";
-  const HEADING_TEXT = "text-[#111827]";
-  const UI_BG_WHITE = "bg-[#FFFFFF]";
-  const CARD_BG = "bg-[#f3f4f6]";
-  const INPUT_BG = "bg-[#f9fafb]";
-  const BORDER_COLOR = "border-[#cbd5e1]";
-  const SUBTLE_TEXT = "text-[#374151]";
+  // --- STYLING CONSTANTS (Updated for a cleaner look) ---
+  const PRIMARY_TEXT = "text-gray-900"; 
+  const HEADING_TEXT = "text-gray-800"; 
+  const UI_BG_WHITE = "bg-white"; 
+  const CARD_BG = "bg-gray-50"; 
+  const INPUT_BG = "bg-white"; 
+  const BORDER_COLOR = "border-gray-300"; 
+  const SUBTLE_TEXT = "text-gray-500"; 
   const SECONDARY_BUTTON_BG = "bg-[#284B63]";
   const ACCENT_BUTTON_HOVER = "hover:bg-[#3C6E71]";
-  const FOCUS_RING = "focus:ring-[#4c7cff]";
+  const FOCUS_RING = "focus:ring-blue-500"; 
+  const ICON_COLOR = "text-[#3C6E71]"; 
+  // --------------------------------------------------------
 
   if (isLoading)
     return (
@@ -43,6 +46,7 @@ const AllPracticals = () => {
   const subjects = [...new Set(approved.map((p) => p.subject))];
   const classes = [...new Set(approved.map((p) => p.className))];
 
+  // --- FILTERING LOGIC ---
   approved = approved.filter((p) => {
     return (
       p.studentName.toLowerCase().includes(searchName.toLowerCase()) &&
@@ -50,81 +54,99 @@ const AllPracticals = () => {
       (filterClass ? p.className === filterClass : true)
     );
   });
+  // -----------------------
 
   return (
-    <div className={`max-w-6xl mx-auto p-8 ${UI_BG_WHITE} shadow-2xl rounded-xl mt-6`}>
-      <h2 className={`text-3xl font-extrabold mb-8 ${HEADING_TEXT} border-b border-[#D4D4D4] pb-3 flex items-center`}>
-        <FileCheck className="w-7 h-7 mr-3 text-[#3C6E71]" />
+    <div className={`max-w-6xl mx-auto p-8 ${UI_BG_WHITE} shadow-xl rounded-xl mt-6`}>
+      <h2 className={`text-3xl font-bold mb-8 ${HEADING_TEXT} border-b border-gray-200 pb-4 flex items-center`}>
+        <FileCheck className={`w-7 h-7 mr-3 ${ICON_COLOR}`} />
         Approved Practical Submissions
       </h2>
 
-      {/* FILTERS */}
+      {/* FILTERS - STYLING IMPROVED */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        
+        {/* 1. Search by Student Name */}
         <div className="relative">
           <Search className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 ${SUBTLE_TEXT}`} />
           <input
             type="text"
             placeholder="Search by Student Name"
-            className={`w-full p-3 pl-10 border ${BORDER_COLOR} rounded-lg ${INPUT_BG} ${PRIMARY_TEXT} focus:outline-none focus:ring-2 ${FOCUS_RING}`}
+            className={`w-full p-3 pl-10 border ${BORDER_COLOR} rounded-xl ${INPUT_BG} ${PRIMARY_TEXT} placeholder-${SUBTLE_TEXT.split('-')[1]} focus:outline-none focus:ring-2 ${FOCUS_RING} shadow-sm transition duration-150`}
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
           />
         </div>
 
-        <select
-          className={`w-full p-3 border ${BORDER_COLOR} ${INPUT_BG} rounded-lg ${PRIMARY_TEXT} focus:ring-2 ${FOCUS_RING}`}
-          value={filterSubject}
-          onChange={(e) => setFilterSubject(e.target.value)}
-        >
-          <option value="">Filter by Subject</option>
-          {subjects.map((subj) => (
-            <option key={subj} value={subj}>{subj}</option>
-          ))}
-        </select>
+        {/* 2. Filter by Subject (Custom Styled Select) */}
+        <div className="relative">
+          <select
+            className={`w-full p-3 border ${BORDER_COLOR} ${INPUT_BG} rounded-xl ${PRIMARY_TEXT} focus:ring-2 ${FOCUS_RING} shadow-sm appearance-none pr-10 transition duration-150`}
+            value={filterSubject}
+            onChange={(e) => setFilterSubject(e.target.value)}
+          >
+            <option value="" disabled>Filter by Subject</option>
+            {subjects.map((subj) => (
+              <option key={subj} value={subj}>{subj}</option>
+            ))}
+          </select>
+          {/* Custom Arrow Down Icon */}
+          <ChevronRight className={`w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none ${SUBTLE_TEXT}`} />
+        </div>
 
-        <select
-          className={`w-full p-3 border ${BORDER_COLOR} ${INPUT_BG} rounded-lg ${PRIMARY_TEXT} focus:ring-2 ${FOCUS_RING}`}
-          value={filterClass}
-          onChange={(e) => setFilterClass(e.target.value)}
-        >
-          <option value="">Filter by Class</option>
-          {classes.map((cls) => (
-            <option key={cls} value={cls}>{cls}</option>
-          ))}
-        </select>
+        {/* 3. Filter by Class (Custom Styled Select) */}
+        <div className="relative">
+          <select
+            className={`w-full p-3 border ${BORDER_COLOR} ${INPUT_BG} rounded-xl ${PRIMARY_TEXT} focus:ring-2 ${FOCUS_RING} shadow-sm appearance-none pr-10 transition duration-150`}
+            value={filterClass}
+            onChange={(e) => setFilterClass(e.target.value)}
+          >
+            <option value="" disabled>Filter by Class</option>
+            {classes.map((cls) => (
+              <option key={cls} value={cls}>{cls}</option>
+            ))}
+          </select>
+          {/* Custom Arrow Down Icon */}
+          <ChevronRight className={`w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none ${SUBTLE_TEXT}`} />
+        </div>
       </div>
+      {/* END OF FILTERS */}
+      
+      <hr className="border-gray-200 mb-6"/>
 
       {/* LIST */}
       <div className="space-y-4">
         {approved.map((p) => (
           <div
             key={p.practicalId}
-            className={`p-5 border ${BORDER_COLOR} rounded-xl ${CARD_BG} flex justify-between items-center hover:shadow-lg transition`}
+            className={`p-5 border border-gray-200 rounded-xl ${CARD_BG} flex justify-between items-center hover:shadow-md cursor-pointer transition-all duration-200`}
+            onClick={() => navigate(`/teacher/approved/${p.practicalId}`)} // Made the entire card clickable
           >
             <div>
-              <p className={`font-extrabold ${PRIMARY_TEXT} text-lg`}>
+              <p className={`font-semibold ${PRIMARY_TEXT} text-lg`}>
                 {p.studentName}
               </p>
 
-              <p className={`text-sm ${SUBTLE_TEXT}`}>
-                <span className="font-semibold text-[#284B63]">{p.subject}</span> | {p.className} |
+              <p className={`text-sm ${SUBTLE_TEXT} mt-0.5`}>
+                <span className="font-medium text-[#284B63]">{p.subject}</span> | {p.className} |
                 Practical {p.practicalNumber} | Roll No: {p.studentRollNumber}
               </p>
             </div>
 
-            <button
-              onClick={() => navigate(`/teacher/approved/${p.practicalId}`)}
-              className={`px-5 py-2 ${SECONDARY_BUTTON_BG} text-white rounded-lg font-semibold ${ACCENT_BUTTON_HOVER} flex items-center`}
+            <div 
+               className={`px-4 py-2 ${SECONDARY_BUTTON_BG} text-white rounded-lg font-medium ${ACCENT_BUTTON_HOVER} flex items-center shadow-sm`}
             >
               Preview Details <ChevronRight className="w-5 h-5 ml-2" />
-            </button>
+            </div>
           </div>
         ))}
 
         {approved.length === 0 && (
-          <div className="text-center p-10 bg-[#f9fafb] border border-[#D4D4D4] rounded-xl">
-            <Search className="w-8 h-8 mx-auto mb-2 text-[#284B63]" />
-            <p className="font-semibold text-[#374151]">No results found.</p>
+          <div className="text-center p-10 bg-gray-50 border border-gray-300 rounded-xl">
+            <Search className="w-8 h-8 mx-auto mb-3 text-gray-400" />
+            <p className="font-semibold text-gray-600">
+                No approved practical submissions match your current filters.
+            </p>
           </div>
         )}
       </div>

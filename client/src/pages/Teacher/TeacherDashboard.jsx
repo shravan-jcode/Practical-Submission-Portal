@@ -60,7 +60,7 @@ const TeacherDashboard = () => {
     return (
         <div className="container mx-auto p-4 md:p-8 space-y-10 bg-gray-50 min-h-screen">
             <h1 className="text-4xl font-extrabold text-slate-800 border-b pb-4">
-                👋 Teacher Dashboard
+                 Teacher Dashboard
             </h1>
 
             {/* --- 1. Key Metrics Section --- */}

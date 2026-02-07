@@ -7,7 +7,7 @@ export const teacherApi = createApi({
     baseUrl: 'http://localhost:5000/api/teacher',
     credentials: 'include',
   }),
-  tagTypes: ['Classes'],
+  tagTypes: ['Classes', 'Submissions'],   // <-- ADD THIS
   endpoints: (builder) => ({
     getClasses: builder.query({
       query: () => '/classes',
@@ -26,11 +26,12 @@ export const teacherApi = createApi({
 
     getSubmissions: builder.query({
       query: () => '/submissions',
+      providesTags: ['Submissions'],      // <-- ADD THIS
     }),
 
-    // ✅ NEW: Fetch single submission
     getSubmissionById: builder.query({
       query: (id) => `/submissions/${id}`,
+      providesTags: ['Submissions'],      // <-- ADD THIS
     }),
 
     checkPractical: builder.mutation({
@@ -39,13 +40,16 @@ export const teacherApi = createApi({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ['Submissions'],   // <-- ADD THIS
     }),
-    getApprovedSubmissions: builder.query({
-  query: () => '/approved-submissions',
-}),
 
+    getApprovedSubmissions: builder.query({
+      query: () => '/approved-submissions',
+      providesTags: ['Submissions'],      // <-- ADD THIS
+    }),
   }),
 });
+
 
 export const {
   useCreateClassMutation,

@@ -1,195 +1,148 @@
 // src/pages/ProfilePage.jsx
 
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLogoutMutation, useGetMeQuery } from "../features/auth/authApi";
-import { setUser, clearUser } from "../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useGetMeQuery } from "../features/auth/authApi";
+import { useJoinClassMutation } from "../features/student/studentApi";
+import { useGetClassesQuery } from "../features/teacher/teacherApi"; 
+import { clearUser } from "../features/auth/authSlice";
+import { useLogoutMutation } from "../features/auth/authApi";
 
-// Shadcn UI
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Loader2, LogOut, School, User, BookOpen } from "lucide-react";
 
 const ProfilePage = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { data, isLoading } = useGetMeQuery();
+  const [logout] = useLogoutMutation();
+  const [joinClass] = useJoinClassMutation();
+  const [classCode, setClassCode] = useState("");
 
-    // Load user from backend
-    const { data, isLoading: isUserLoading, error } = useGetMeQuery();
+  const user = data?.user;
 
-    const user = useSelector((state) => state.auth.user);
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { data: teacherClasses } = useGetClassesQuery(undefined, {
+    skip: user?.role !== "Teacher",
+  });
 
-    const [logout, { isLoading: isLogoutLoading }] = useLogoutMutation();
+  const handleLogout = async () => {
+    await logout();
+    dispatch(clearUser());
+    window.location.href = "/login";
+  };
 
-    // Sync /me → Redux state
-    useEffect(() => {
-        if (data?.user) {
-            dispatch(setUser(data.user));
-        }
-    }, [data, dispatch]);
-
-    // If unauthorized, clear user
-    useEffect(() => {
-        if (error) {
-            dispatch(clearUser());
-        }
-    }, [error, dispatch]);
-
-    // Logout
-    const handleLogout = async () => {
-        try {
-            await logout().unwrap();
-            dispatch(clearUser());
-            navigate("/login");
-        } catch (err) {
-            console.error("Logout failed:", err);
-        }
-    };
-
-    // Loading state
-    if (isUserLoading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen text-lg">
-                Loading profile...
-            </div>
-        );
+  const handleJoinClass = async () => {
+    if (!classCode.trim()) return;
+    try {
+      const res = await joinClass(classCode).unwrap();
+      alert("Successfully joined class");
+      setClassCode("");
+    } catch (err) {
+      alert(err?.data?.message || "Failed to join class");
     }
+  };
 
-    // Not logged in
-    if (!isAuthenticated || !user) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <Card className="w-[400px] shadow-lg">
-                    <CardHeader>
-                        <CardTitle>Unauthorized</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p>You need to log in to view this page.</p>
-                    </CardContent>
-                    <CardFooter>
-                        <Button onClick={() => navigate("/login")}>Go to Login</Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        );
-    }
-
-    // Avatar initials
-    const getInitials = (name) => {
-        if (!name) return "";
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-            .toUpperCase()
-            .slice(0, 2);
-    };
-
+  if (isLoading)
     return (
-        <div className="flex justify-center items-start min-h-screen p-6 bg-gray-100">
-            <Card className="w-full max-w-4xl shadow-xl border rounded-xl">
-                
-                {/* Header */}
-                <CardHeader className="flex flex-col md:flex-row justify-between items-center bg-gray-50 border-b p-6">
-                    <div className="flex items-center gap-6">
-                        
-                        {/* Avatar */}
-                        <Avatar className="h-24 w-24 border-4 border-blue-600 shadow">
-                            <AvatarFallback className="bg-blue-500 text-white text-3xl">
-                                {getInitials(user.name)}
-                            </AvatarFallback>
-                        </Avatar>
-
-                        {/* User Info */}
-                        <div>
-                            <CardTitle className="text-3xl font-bold">
-                                {user.name}
-                            </CardTitle>
-                            <CardDescription className="text-gray-600">
-                                {user.email}
-                            </CardDescription>
-
-                            <Badge
-                                className={`mt-2 px-4 py-1 text-sm ${
-                                    user.role === "Student"
-                                        ? "bg-blue-200 text-blue-800"
-                                        : "bg-green-600 text-white"
-                                }`}
-                            >
-                                {user.role}
-                            </Badge>
-                        </div>
-                    </div>
-
-                    {/* Logout */}
-                    <Button
-                        onClick={handleLogout}
-                        disabled={isLogoutLoading}
-                        className="bg-blue-600 text-white hover:bg-blue-700 mt-4 md:mt-0"
-                    >
-                        {isLogoutLoading ? "Logging out..." : "Logout"}
-                    </Button>
-                </CardHeader>
-
-                {/* Body */}
-                <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-8 p-6">
-
-                    {/* Left – Account Info */}
-                    <div className="space-y-4">
-                        <h3 classname="text-xl font-semibold border-l-4 border-blue-500 pl-3">
-                            Account Details
-                        </h3>
-
-                        <div className="bg-gray-50 border rounded-lg p-4 space-y-3">
-                            <p><strong>College:</strong> {user.collegeName}</p>
-
-                            {user.role === "Student" && user.rollNumber && (
-                                <p><strong>Roll Number:</strong> {user.rollNumber}</p>
-                            )}
-
-                            <p><strong>User ID:</strong> {user._id}</p>
-                        </div>
-
-                        <Button variant="outline" className="w-full">
-                            Edit Profile
-                        </Button>
-                    </div>
-
-                    {/* Right – Classes/Courses */}
-                    <div className="md:col-span-2 space-y-4">
-                        <h3 className="text-xl font-semibold border-l-4 border-blue-500 pl-3">
-                            {user.role === "Student" ? "My Classes" : "My Courses"}
-                        </h3>
-
-                        <Card className="border shadow">
-                            <CardContent className="p-4">
-
-                                {/* If you later connect real classes, map them here */}
-                                <p className="text-gray-600 text-center py-6">
-                                    No classes assigned yet.
-                                </p>
-
-                                <Separator className="my-4" />
-                                <div className="text-center">
-                                    <Button variant="link">
-                                        View All
-                                    </Button>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </CardContent>
-
-                <CardFooter className="bg-gray-50 p-4 text-xs text-gray-600 border-t">
-                    Profile data is managed by the system administrator.
-                </CardFooter>
-            </Card>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="animate-spin" />
+      </div>
     );
+
+  return (
+    <div className="max-w-3xl mx-auto mt-10 px-3">
+      {/* Profile Card */}
+      <Card className="shadow-md">
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2">
+            <User size={20} /> Profile
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-3 text-sm">
+          <p><strong>Name:</strong> {user?.name}</p>
+          <p><strong>Email:</strong> {user?.email}</p>
+          <p><strong>Role:</strong> {user?.role}</p>
+          <p><strong>College:</strong> {user?.collegeName}</p>
+        </CardContent>
+      </Card>
+
+      {/* Student Section */}
+      {user?.role === "Student" && (
+        <Card className="shadow-md mt-6">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <School size={20} /> Your Classes
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+            {user?.classes?.length > 0 ? (
+              user.classes.map((c) => (
+                <div key={c} className="p-2 rounded border">
+                  Class ID: {c}
+                </div>
+              ))
+            ) : (
+              <p>No classes joined yet.</p>
+            )}
+
+            <div className="flex gap-2 mt-3">
+              <Input
+                placeholder="Enter class code"
+                value={classCode}
+                onChange={(e) => setClassCode(e.target.value)}
+              />
+              <Button onClick={handleJoinClass}>Join</Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Teacher Section */}
+      {user?.role === "Teacher" && (
+        <Card className="shadow-md mt-6">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <BookOpen size={20} /> Your Created Classes
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-3">
+            {teacherClasses && teacherClasses.length > 0 ? (
+              teacherClasses.map((cls) => (
+                <div
+                  key={cls._id}
+                  className="border p-2 rounded bg-gray-50 hover:bg-gray-100"
+                >
+                  <p><strong>Name:</strong> {cls.className}</p>
+                  <p><strong>Code:</strong> {cls.classCode}</p>
+                </div>
+              ))
+            ) : (
+              <p>No classes created yet.</p>
+            )}
+
+            <Button className="mt-2" onClick={() => (window.location.href = "/teacher/create-class")}>
+              Create New Class
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Logout Button */}
+      <div className="mt-8 text-center">
+        <Button
+          variant="destructive"
+          className="flex items-center gap-2 mx-auto"
+          onClick={handleLogout}
+        >
+          <LogOut size={18} /> Logout
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export default ProfilePage;
