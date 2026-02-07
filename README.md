@@ -127,7 +127,7 @@ CLIENT_URL=http://localhost:3000
 
 ## ⚙️ Installation & Setup**
 1️⃣ Clone Repository
-git clone https://github.com/shravan-jcode/psp.git
+git clone https://github.com/shravan-jcode/Code-Crafters.git
 
 2️⃣ Frontend Setup
 cd client
