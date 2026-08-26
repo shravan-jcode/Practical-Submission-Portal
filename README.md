@@ -1,116 +1,146 @@
 # Practical Submission Portal 🎓
 
-A full-stack MERN web application where students can submit their practicals digitally and teachers can manage, track, approve, or reject them in a structured and secure way.
+A full-stack MERN web application that provides a secure and organized way for students to submit practical work digitally and for teachers to review, track, approve, or reject submissions.
 
-This platform provides a **simple user experience with robust features**, focusing only on practical submission and tracking — without unnecessary college administrative complexity.
+The platform focuses specifically on practical submission and tracking, providing a simple workflow without unnecessary college-administration complexity.
 
---------------------------------------------------------------------
+---
 
 ## 🚀 Project Objective
 
-To create a **secure, simple, and efficient digital system** for:
-- Practical submission  
-- Subject-based grouping  
-- Teacher verification  
-- Student tracking  
-- Status monitoring (Pending / Approved / Rejected)  
-- Secure access using authentication and authorization  
+The main objective of the Practical Submission Portal is to provide a secure and efficient digital system for:
 
---------------------------------------------------------------------
+* Submitting practical work online.
+* Organizing practicals by subject.
+* Connecting students to teacher-created subjects using unique subject codes.
+* Allowing teachers to review and manage submissions.
+* Tracking submission status such as **Pending**, **Approved**, and **Rejected**.
+* Protecting student, teacher, subject, and submission data through authentication and authorization.
+
+---
+
 ## 🧠 Core Concept
 
-- Teachers create subjects  
-- Each subject gets a **unique subject code**  
-- Teacher shares the code with students  
-- Students join the subject using the code  
-- Once joined, the subject is permanently linked to the student  
-- Students upload practicals under that subject  
-- Teachers review, approve, or reject  
-- Practicals are:
-  - Tracked by date  
-  - Sorted by class  
-  - Filtered by subject  
-  - Linked to student & teacher  
+The application follows a controlled subject-based workflow:
 
-No fake subjects, no public access — only **teacher-created subjects** and **teacher-shared codes**.
+1. A teacher creates a subject.
+2. The system generates a unique subject code.
+3. The teacher shares the code with students.
+4. Students join the subject using the code.
+5. Joined subjects are linked to the student's account.
+6. Students upload practical work under the appropriate subject.
+7. Teachers review each submission.
+8. Teachers can approve or reject submissions.
+9. Students can track the current status of their practicals.
+
+There is no public submission access. Subjects are created by authenticated teachers, and students can access subjects through the teacher-provided subject code.
 
 ---
 
 ## ✨ Features
 
 ### 👨‍🏫 Teacher Features
-- Create subjects  
-- Auto-generate unique subject code  
-- Share subject code with students  
-- View student submissions  
-- Approve / Reject practicals  
-- Track practicals by:
-  - Date  
-  - Student  
-  - Class  
-  - Subject  
-- Secure teacher dashboard  
+
+* Register and log in securely.
+* Create and manage subjects.
+* Automatically generate unique subject codes.
+* Share subject codes with students.
+* View students associated with subjects.
+* View practical submissions.
+* Approve or reject practical submissions.
+* Track submissions by date, student, class, and subject.
+* Access a protected teacher dashboard.
 
 ### 👨‍🎓 Student Features
-- Register & login  
-- Join subject using subject code  
-- Auto-save joined subjects  
-- Upload practicals per subject  
-- Track practical status:
-  - Pending  
-  - Approved  
-  - Rejected  
-- Secure student dashboard  
+
+* Register and log in securely.
+* Join subjects using unique subject codes.
+* View joined subjects.
+* Upload practical work under a selected subject.
+* Track practical submission status.
+* View pending, approved, and rejected submissions.
+* Access a protected student dashboard.
+
+### 📋 Submission Management
+
+* Subject-based practical organization.
+* Submission tracking by student and teacher.
+* Submission status management.
+* Date-based tracking.
+* Structured access to practical files.
 
 ---
 
 ## 🔐 Security Features
 
-- JWT Authentication  
-- Secure Routes  
-- Role-based Authorization  
-- Protected APIs  
-- Token-based login system  
-- Private practical visibility  
-- Subject-based access control  
+* JWT-based authentication.
+* Secure authentication cookies.
+* Role-based authorization.
+* Protected frontend routes.
+* Protected backend APIs.
+* Role-based middleware.
+* Subject-based access control.
+* Private practical visibility.
+* Secure handling of authentication and user data.
 
 ---
 
 ## 🧰 Tech Stack
 
 ### Frontend
-- React  
-- Tailwind CSS  
-- Axios  
+
+* React.js
+* Tailwind CSS
+* Axios
 
 ### Backend
-- Node.js  
-- Express.js  
-- JWT Authentication  
-- REST API  
+
+* Node.js
+* Express.js
+* REST API
+* JWT Authentication
 
 ### Database
-- MongoDB  
+
+* MongoDB
 
 ### Cloud Services
-- Cloudinary (for file uploads)  
+
+* Cloudinary for practical file uploads and media storage.
+
+### Development Tools
+
+* Git
+* GitHub
+* npm
 
 ---
 
 ## 📁 Project Structure
-PSPm/
+
+```text
+Practical-Submission-Portal/
 │
-├── client/ # Frontend (React + Tailwind)
-├── server/ # Backend (Node + Express)
+├── client/                 # React frontend
+│   └── ...
+│
+├── server/                 # Node.js + Express backend
+│   └── ...
+│
 ├── .gitignore
 ├── README.md
-
+└── ...
+```
 
 ---
 
 ## 🔑 Environment Setup
 
-Create a `.env` file inside `server/` using `.env.example`
+Environment variables are required for database access, authentication, Cloudinary, and frontend-backend communication.
+
+Create a `.env` file inside the `server/` directory using `server/.env.example` as a reference.
+
+Example:
 
 ```env
 NODE_ENV=development
@@ -123,144 +153,221 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLIENT_URL=http://localhost:3000
+```
 
+Create the required frontend environment file inside `client/` if your frontend configuration requires one.
 
-## ⚙️ Installation & Setup**
-1️⃣ Clone Repository
-git clone : https://github.com/shravan-jcode/Practical-Submission-Portal.git
+> **Never commit `.env` files, API keys, passwords, database credentials, or other sensitive information to GitHub.** Use `.env.example` files to document the required variables safely.
 
-2️⃣ Frontend Setup
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/shravan-jcode/Practical-Submission-Portal.git
+```
+
+### 2. Navigate to the Project
+
+```bash
+cd Practical-Submission-Portal
+```
+
+### 3. Install Frontend Dependencies
+
+```bash
 cd client
 npm install
-npm run dev
+```
 
-3️⃣ Backend Setup
-cd server
+### 4. Install Backend Dependencies
+
+```bash
+cd ../server
 npm install
+```
+
+### 5. Configure Environment Variables
+
+Create the required `.env` files using the corresponding `.env.example` files as references.
+
+---
+
+## ▶️ Running the Project
+
+### Start the Backend
+
+Open a terminal and run:
+
+```bash
+cd server
+npm run dev
+```
+
+If your server is configured to use Nodemon directly, you can alternatively run:
+
+```bash
 nodemon server.js
+```
 
+### Start the Frontend
 
---------------------------------------------------------------------
-🔄 Project Flow
-👨‍🏫 Teacher Flow
+Open another terminal and run:
 
-Register/Login
+```bash
+cd client
+npm run dev
+```
 
+The exact commands and ports may vary depending on the project's `package.json` configuration.
+
+---
+
+## 🔄 Project Flow
+
+### 👨‍🏫 Teacher Flow
+
+```text
+Register / Login
+       ↓
 Create Subject
+       ↓
+System Generates Subject Code
+       ↓
+Share Code With Students
+       ↓
+View Student Submissions
+       ↓
+Approve / Reject Practicals
+```
 
-System generates subject code
+### 👨‍🎓 Student Flow
 
-Share code with students
+```text
+Register / Login
+       ↓
+Enter Subject Code
+       ↓
+Join Subject
+       ↓
+Upload Practical
+       ↓
+Track Submission Status
+```
 
-View submissions
+---
 
-Approve/Reject practicals
+## 📌 Access Control
 
-👨‍🎓 Student Flow
+| Role    | Access                                                   |
+| ------- | -------------------------------------------------------- |
+| Student | Joined subjects and own practical submissions            |
+| Teacher | Own subjects, associated students, and their submissions |
+| Public  | No access to protected application functionality         |
 
-Register/Login
+---
 
-Enter subject code
+## 🧪 Authentication & Authorization
 
-Join subject
+The application uses multiple layers of access control:
 
-Upload practicals
+* JWT-based authentication.
+* Secure cookies for authentication tokens.
+* Role-based middleware.
+* Protected API endpoints.
+* Protected application routes.
+* Authorization checks for subjects and practical submissions.
 
-Track status
+---
 
---------------------------------------------------------------------
+## 📸 Screenshots
 
-📌 Access Control Logic
-Role	Access
-Student	Own subjects & practicals
-Teacher	Own subjects & students
-Public	No access
---------------------------------------------------------------------
+Screenshots can be added here to provide a visual overview of the application.
 
-🧪 Authentication System
+Recommended screenshots include:
 
-JWT Token
+* Login/Register page.
+* Student dashboard.
+* Teacher dashboard.
+* Subject creation page.
+* Subject joining page.
+* Practical submission page.
+* Submission tracking page.
+* Teacher review/approval page.
 
-Secure cookies
+Example:
 
-Role-based middleware
+```markdown
+![Login Page](./screenshots/login.png)
+![Student Dashboard](./screenshots/student-dashboard.png)
+![Teacher Dashboard](./screenshots/teacher-dashboard.png)
+```
 
-Protected APIs
+---
 
-Authorization layers
+## 🎯 Project Goals
 
---------------------------------------------------------------------
+The project is designed to demonstrate:
 
-🎯 Project Goal
+* A practical real-world use case for a MERN application.
+* Secure authentication and authorization.
+* Role-based application workflows.
+* REST API development.
+* File upload and cloud storage integration.
+* Structured MongoDB data management.
+* Clean separation between frontend and backend.
+* A scalable foundation for future improvements.
 
-To provide:
+---
 
-Simple UI
+## 🔮 Future Enhancements
 
-Secure backend
+Possible future improvements include:
 
-Scalable architecture
+* Email notifications for submission status changes.
+* Admin dashboard.
+* Submission analytics and reports.
+* Attendance integration.
+* PDF report generation.
+* AI-assisted plagiarism detection.
+* Improved teacher and student analytics.
+* Mobile application support.
 
-Clean code structure
+---
 
-Real-world project experience
+## 📌 Project Status
 
-Production-ready structure
+🚧 **In Development**
 
---------------------------------------------------------------------
+The core practical submission, subject management, authentication, authorization, and submission tracking functionality is being developed, with additional improvements planned for future versions.
 
-👥 Team Name
+---
 
-Code Crafters
+## 👨‍💻 Author
 
-👨‍💻 Team Members
+**Shravan Jadhav**
 
-Sakshi Kurup
+This project was developed as an individual full-stack web application for digitally managing practical submissions and their review workflow.
 
-Siddhi Kadam
+---
 
-Purva Patole
+## 🏫 Project Type
 
-Sagar Ramane
+* Web Application
+* MERN Stack Project
+* JWT-Secured System
+* Role-Based Access Platform
 
-Amey Salvi
+---
 
-Shravan Jadhav
-
-Siddesh Mane
-
---------------------------------------------------------------------
-
-🏫 Project Type
-
-Web Application
-
-MERN Stack Project
-
-JWT Secured System
-
-Role-Based Access Platform
-
---------------------------------------------------------------------
-
-📜 License
+## 📜 License
 
 This project is developed for academic and learning purposes.
 
---------------------------------------------------------------------
+---
 
-⭐ Future Enhancements
+## ⭐ Support
 
-Email notifications
-
-Admin dashboard
-
-Analytics
-
-Attendance integration
-
-PDF reports
-
-AI plagiarism detection
-
-Mobile app version
+If you find this project useful or interesting, consider giving the repository a ⭐ on GitHub.
